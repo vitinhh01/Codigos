@@ -1,0 +1,22 @@
+[project]
+name = "trabalho-av5"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Vitinho", email = "victorew1234@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pymysql>=1.2.3",
+    "python-dotenv>=1.2.4",
+    "sqlalchemy>=2.1.3",
+    "sqlalchemy-orm>=1.2.10",
+]
+
+[project.scripts]
+trabalho-av5 = "trabalho_av5:main"
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"

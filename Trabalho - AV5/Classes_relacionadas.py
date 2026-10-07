@@ -1,6 +1,8 @@
 from sqlalchemy import ForeignKey, create_engine, String, Integer
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session, relationship
 from typing import List, Optional
+import os
+from dotenv import load_dotenv
 
 class Base(DeclarativeBase):
     pass
@@ -24,16 +26,21 @@ class Jogador(Base):
     time_id: Mapped[int] = mapped_column(ForeignKey("tabela_time.id"))
     Time: Mapped["time"] = relationship(back_populates="jogador")
 
-# chave estrangeira :-)
-    pessoa_id: Mapped[int] = mapped_column(ForeignKey("tabela_time.id"))
-    # atributo para acesso ao objeto inteiro :-)
-    # esse atributo está "ligado" ao atributo "celulares", pois
-    # é usado para "popular" a lista de celulares da classe Pessoa
-    pessoa: Mapped["time"] = relationship(back_populates="jogadores")    
+load_dotenv()
 
+# buscando as variáveis de ambiente
+MYSQL_USER = os.getenv("MYSQL_USER")
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
+MYSQL_HOST = os.getenv("MYSQL_HOST")
+MYSQL_PORT = int(os.getenv("MYSQL_PORT", 12960))
+MYSQL_DATABASE = os.getenv("MYSQL_DATABASE")
 
-    
-engine = create_engine("sqlite:///time_e_jogadores.db")
+# definição do banco de dados
+engine = create_engine(
+f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
+)
+
+Base.metadata.create_all(engine)
 
 # configuração para criar o arquivo de banco de dados
 Base.metadata.create_all(engine)
@@ -47,11 +54,11 @@ with Session(engine) as session:
             )
 
 # criar um celular
-    j1 = Jogador( id = 2131241941, nome = "Ariel",
-        numero_camisa = "10"  posicao = "ala_esquerda")
+    j1 = Jogador (id = 2131241941, nome = "Ariel",
+        numero_camisa = "10",  posicao = "ala_esquerda")
 
 # informar o DONO do celular
-    j1.time = t
+    t.j1 = j1
 
 # adicionar os objetos na sessão
     session.add(t)
